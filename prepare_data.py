@@ -19,7 +19,7 @@ urls = [
 def download_file(url):
     filename = url.split("/")[-1].split("?")[0]
     response = requests.get(url, stream=True)
-    datasets_dir = Path(os.getcwd()) / "datasets"
+    datasets_dir = Path(os.getcwd()) / "datasets" / "methane" / "data"
     datasets_dir.is_dir() or datasets_dir.mkdir(parents=True, exist_ok=True)
     filename = datasets_dir / filename
 
