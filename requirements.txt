@@ -28,3 +28,4 @@ torchmetrics
 yapf
 safetensors
 gradio
+tqdm
