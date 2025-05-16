@@ -67,9 +67,9 @@ class MethaneUnconditionaltBase(Dataset):
 
         image = inputs
         image = np.transpose(inputs, (1, 2, 0))
-        image = np.clip(image * 255.0, 0, 255).astype(np.uint8)
+
+        image = image / np.max(image)
         image_cp = image.copy()
-        print(f"image.shape: {image.shape}")
         h, w, c = image.shape
         assert h == w, (
             "The images are not equal in length and width, please resize the images in the dataset to the same length and width first."
@@ -156,34 +156,18 @@ class MethaneUnconditionaltBase(Dataset):
             image = rotated_image[y_min:y_max, x_min:x_max]
 
         try:
-            resized_channels = [
-                cv2.resize(
-                    image[:, :, i],
-                    (self.size, self.size),
-                    interpolation=cv2.INTER_LINEAR,
-                )
-                for i in range(image.shape[2])
-            ]
-            image = np.stack(resized_channels, axis=-1)
+            image = cv2.resize(image, (self.size, self.size))
         except:
-            resized_channels = [
-                cv2.resize(
-                    image_cp[:, :, i],
-                    (self.size, self.size),
-                    interpolation=cv2.INTER_LINEAR,
-                )
-                for i in range(image_cp.shape[2])
-            ]
-            image = np.stack(resized_channels, axis=-1)
+            image = cv2.resize(image_cp, (self.size, self.size))
             print(example["file_path_"])
             print(x_max, x_min, y_max, y_min)
+
 
         if random.random() < self.flip:
             image = cv2.flip(image, 0)
         image = np.array(image).astype(np.uint8)
         example["image"] = (image / 127.5 - 1.0).astype(np.float32)
         example["reference"] = reference
-        print(f"final_image.shape: {example['image'].shape}")
         return example
 
 
@@ -274,9 +258,11 @@ class MethaneConditionaltBase(Dataset):
         ]
         inputs_paths.sort()
         target = np.array([iio.imread(s) for s in inputs_paths], dtype=np.float32)
+        target = target / np.max(target)
 
         source = np.array(iio.imread(source_path))
 
+        source = source * 255
         if source.ndim != 2:
             raise ValueError("Obraz powinien być w skali szarości (2D)")
 
