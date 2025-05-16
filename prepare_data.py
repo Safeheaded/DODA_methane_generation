@@ -31,10 +31,7 @@ def download_file(url):
     total_size = int(response.headers.get("content-length", 0))
     chunk_size = 8192
 
-    with (
-        open(filename, "wb") as file,
-        tqdm(total=total_size, unit="B", unit_scale=True, desc=filename.name) as pbar,
-    ):
+    with open(filename, "wb") as file, tqdm(total=total_size, unit="B", unit_scale=True, desc=filename.name) as pbar:
         for chunk in response.iter_content(chunk_size=chunk_size):
             if chunk:
                 file.write(chunk)
