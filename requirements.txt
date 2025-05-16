@@ -29,3 +29,4 @@ safetensors
 gradio
 tqdm
 scikit-learn
+imagecodecs
