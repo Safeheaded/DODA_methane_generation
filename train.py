@@ -15,11 +15,11 @@ from pytorch_lightning import seed_everything
 # Load .env variables
 load_dotenv()
 
-NEPTUNE_API_TOKEN = os.getenv("NEPTUNE_API_TOKEN")
+NEPTUNE_API_TOKEN = os.getenv("NEPTUNE_API_KEY")
 PROJECTS = {
-    "vae": os.getenv("NEPTUNE_PROJECT_VAE"),
-    "ldm": os.getenv("NEPTUNE_PROJECT_LDM"),
-    "l2i": os.getenv("NEPTUNE_PROJECT_L2I"),
+    "vae": os.getenv("NEPTUNE_VAE_PROJECTNAME"),
+    "ldm": os.getenv("NEPTUNE_LDM_PROJECTNAME"),
+    "l2i": os.getenv("NEPTUNE_L2I_PROJECTNAME"),
 }
 
 app = typer.Typer()
