@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  python-app:
+  doda_methane_generation:
     build: .
     container_name: DODA_methane_generation
     volumes:
@@ -11,6 +11,9 @@ services:
       - type: bind
         source: ./output
         target: /app/output
+      - type: bind
+        source: ./datasets
+        target: /app/datasets
     network_mode: host
     deploy:
       resources:
