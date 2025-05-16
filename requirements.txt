@@ -17,7 +17,6 @@ albumentations
 opencv-python
 imageio
 imageio-ffmpeg
-pytorch-lightning
 omegaconf
 test-tube
 streamlit
@@ -29,3 +28,4 @@ yapf
 safetensors
 gradio
 tqdm
+scikit-learn
