@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM --platform=linux/amd64 python:3.8-slim
 
 # Ustaw zmienne środowiskowe
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -25,7 +25,7 @@ COPY . .
 
 RUN python -m pip install numpy
 
-RUN python -m pip install torch==1.13.0 torchvision==0.14.0 --index-url https://download.pytorch.org/whl/cu128
+RUN python -m pip install torch==1.13.0 torchvision==0.14.0 --index-url https://download.pytorch.org/whl/cu116
 
 # Zainstaluj zależności
 RUN python -m pip install --upgrade pip && \
