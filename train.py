@@ -94,19 +94,19 @@ def train_model(
 @app.command()
 def vae(resume: Optional[str] = typer.Option(None, help="Ścieżka do checkpointu")):
     config = "configs/autoencoder/methane_autoencoder_kl_64x64x3.yaml"
-    train_model(config=config, project_key="vae", resume_path=resume)
+    train_model(config=config, project_key="vae", resume_path=resume, learning_rate=2.5e-6)
 
 
 @app.command()
 def ldm(resume: Optional[str] = typer.Option(None, help="Ścieżka do checkpointu")):
     config = "configs/latent-diffusion/methane_ldm_kl_4.yaml"
-    train_model(config=config, project_key="ldm", resume_path=resume)
+    train_model(config=config, project_key="ldm", resume_path=resume, learning_rate=2.5e-5)
 
 
 @app.command()
 def l2i(resume: Optional[str] = typer.Option(None, help="Ścieżka do checkpointu")):
     config = "configs/controlnet/methane_cldm_kl_4.yaml"
-    train_model(config=config, project_key="l2i", resume_path=resume)
+    train_model(config=config, project_key="l2i", resume_path=resume, learning_rate=1.5e-5)
 
 
 if __name__ == "__main__":
