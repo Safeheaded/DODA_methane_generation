@@ -31,4 +31,3 @@ tqdm
 scikit-learn
 imagecodecs
 dotenv
-neptune-client<1.0.0

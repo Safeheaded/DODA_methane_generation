@@ -63,10 +63,12 @@ class MethaneUnconditionaltBase(Dataset):
             and f.name in allowed_inputs
         ]
         inputs_paths.sort()
-        inputs = np.array([iio.imread(s) for s in inputs_paths], dtype=np.float32)
+        inputs = np.array([iio.imread(s).astype(np.float32) / np.max(iio.imread(s)) for s in inputs_paths], dtype=np.float32)
 
         image = inputs
         image = np.transpose(inputs, (1, 2, 0))
+        
+        image = (image * 255).astype(dtype=np.uint8)
 
         image = image / np.max(image)
         image_cp = image.copy()
@@ -257,12 +259,12 @@ class MethaneConditionaltBase(Dataset):
             and f.name in allowed_inputs
         ]
         inputs_paths.sort()
-        target = np.array([iio.imread(s) for s in inputs_paths], dtype=np.float32)
-        target = target / np.max(target)
+
+        target = np.array([iio.imread(s).astype(np.float32) / np.max(iio.imread(s)) for s in inputs_paths], dtype=np.float32)
 
         source = np.array(iio.imread(source_path))
+        source = source / np.max(source)
 
-        source = source * 255
         if source.ndim != 2:
             raise ValueError("Obraz powinien być w skali szarości (2D)")
 
@@ -275,6 +277,9 @@ class MethaneConditionaltBase(Dataset):
             random_indices = np.random.permutation(3)
             # 使用随机索引重新排列第三维
             source = source[:, :, random_indices]
+            
+        source = (source * 255).astype(dtype=np.uint8)
+        target = (target * 255).astype(dtype=np.uint8)
 
         source_cp = source.copy()
         target_cp = target.copy()
