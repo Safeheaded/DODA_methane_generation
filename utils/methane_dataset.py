@@ -70,7 +70,6 @@ class MethaneUnconditionaltBase(Dataset):
         
         image = (image * 255).astype(dtype=np.uint8)
 
-        image = image / np.max(image)
         image_cp = image.copy()
         h, w, c = image.shape
         assert h == w, (
@@ -211,8 +210,8 @@ class MethaneConditionaltBase(Dataset):
         with open(self.data_paths, "rt") as f:
             self.image_paths = f.read().splitlines()
         self._length = len(self.image_paths)
-        self.source_folder_path = os.path.join(self.data_root, "source")
-        self.target_folder_path = os.path.join(self.data_root, "target")
+        self.source_folder_path = self.data_root
+        self.target_folder_path = self.data_root
         # source == mask label
         self.labels = {
             "source_file_path_": [
@@ -240,7 +239,7 @@ class MethaneConditionaltBase(Dataset):
         example = dict((k, self.labels[k][idx]) for k in self.labels)
 
         target_path = Path(example["target_file_path_"])
-        source_path = example["source_file_path_"]
+        source_path = Path(example["source_file_path_"])
 
         possible_labels = ["labelbinary.tif", "label_rgba.tif"]
 
@@ -259,10 +258,12 @@ class MethaneConditionaltBase(Dataset):
             and f.name in allowed_inputs
         ]
         inputs_paths.sort()
-
+        # target = np.array([iio.imread(s) for s in inputs_paths], dtype=np.float32)
         target = np.array([iio.imread(s).astype(np.float32) / np.max(iio.imread(s)) for s in inputs_paths], dtype=np.float32)
+        target = np.transpose(target, (1, 2, 0))
+        # target = target / np.max(target)
 
-        source = np.array(iio.imread(source_path))
+        source = np.array(iio.imread(source_path / "labelbinary.tif"))
         source = source / np.max(source)
 
         if source.ndim != 2:
@@ -278,6 +279,7 @@ class MethaneConditionaltBase(Dataset):
             # 使用随机索引重新排列第三维
             source = source[:, :, random_indices]
             
+        
         source = (source * 255).astype(dtype=np.uint8)
         target = (target * 255).astype(dtype=np.uint8)
 
