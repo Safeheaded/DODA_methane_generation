@@ -14,6 +14,9 @@ services:
       - type: bind
         source: ./datasets
         target: /app/datasets
+      - type: bind
+        source: ./image_log
+        target: /app/image_log
     network_mode: host
     deploy:
       resources:
