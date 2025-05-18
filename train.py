@@ -69,6 +69,17 @@ def train_model(
         log_model_checkpoints=False,
     )
 
+    neptune_logger.experiment["hyperparameters"] = {
+        "config": config,
+        "resume_path": resume_path,
+        "logger_freq": logger_freq,
+        "max_steps": max_steps,
+        "sd_locked": sd_locked,
+        "learning_rate": learning_rate,
+        "accumulate_grad_batches": accumulate_grad_batches,
+        "seed": seed,
+    }
+
     trainer = pl.Trainer(
         gpus=1,
         precision=32,
